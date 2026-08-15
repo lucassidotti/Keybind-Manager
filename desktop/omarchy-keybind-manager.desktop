@@ -1,0 +1,9 @@
+[Desktop Entry]
+Type=Application
+Name=Keybind Manager
+Comment=Create and manage Omarchy application shortcuts
+Exec=omarchy-launch-tui --app-id=org.omarchy.keybind-manager omarchy-keybind-manager
+Icon=input-keyboard
+Terminal=false
+Categories=Settings;
+Keywords=omarchy;hyprland;shortcut;keybind;keyboard;
