@@ -16,6 +16,8 @@ Gestor TUI de atajos personales para [Omarchy](https://omarchy.org/) y Hyprland.
 La UI se abre en la terminal predeterminada de Omarchy y utiliza `gum`, por lo que adopta el tema del sistema.
 Detecta `LC_ALL`, `LC_MESSAGES` o `LANG`: actualmente ofrece español para locales `es_*` e inglés para el resto; el inglés es el fallback seguro.
 
+La ventana abre centrada y flotante a `760×560`, identificada por su app-id exclusivo. La regla no fuerza colores, bordes, opacidad ni animaciones: conserva los parámetros del tema Omarchy activo.
+
 ## Requisitos
 
 Omarchy 4, Hyprland, `gum`, `jq`, `uwsm-app` y Bash. En una instalación normal de Omarchy ya están presentes.
@@ -50,6 +52,7 @@ omarchy menu keybindings --print
 | --- | --- |
 | `~/.config/omarchy/keybind-manager/bindings.json` | Base de datos de atajos personales. |
 | `~/.config/hypr/keybind-manager.lua` | Lua generado y cargado por Hyprland. |
+| `~/.config/hypr/keybind-manager-window.lua` | Regla de ventana compacta y centrada. |
 | `~/.config/hypr/bindings.lua` | Sólo añade `require("hypr.keybind-manager")`. |
 
 ## Desarrollo y verificación
