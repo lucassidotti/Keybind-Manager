@@ -32,7 +32,6 @@ t() {
     es:ready) printf 'Listo: %s abre %s.' "$1" "$2" ;; en:ready) printf 'Done: %s opens %s.' "$1" "$2" ;;
     es:another) printf '¿Asignar otro atajo?' ;; en:another) printf 'Assign another shortcut?' ;;
     es:no_bindings) printf 'Todavía no hay atajos creados con este gestor.' ;; en:no_bindings) printf 'There are no shortcuts created with this manager yet.' ;;
-    es:columns) printf 'Atajo,Aplicación,Comando' ;; en:columns) printf 'Shortcut,Application,Command' ;;
     es:continue) printf 'Enter para volver' ;; en:continue) printf 'Press Enter to return' ;;
     es:choose_remove) printf 'Elegí el atajo a eliminar' ;; en:choose_remove) printf 'Choose a shortcut to remove' ;;
     es:remove_confirm) printf '¿Eliminar %s?' "$1" ;; en:remove_confirm) printf 'Remove %s?' "$1" ;;
@@ -186,13 +185,9 @@ add_binding() {
 
 list_bindings() {
   local rows
-  # Keep the overview compact: commands are often long enough to make the
-  # terminal table unreadable, while the full command remains safely stored.
-  rows="$(jq -r '.[] | [.key, .name, (.command | if length > 42 then .[0:39] + "…" else . end)] | @tsv' "$STATE_FILE")"
+  rows="$(jq -r '.[] | "• \(.key) → \(.name)\n  \(.command)"' "$STATE_FILE")"
   [[ -n $rows ]] || { gum style --faint "$(t no_bindings)"; return; }
-  # jq produces TSV, whereas gum defaults to CSV.  Passing the separator is
-  # what makes each binding render as the intended three-column grid.
-  printf '%s\n' "$rows" | gum table --separator $'\t' --border rounded --print --columns "$(t columns)" --padding '0 1'
+  printf '%s\n' "$rows" | gum style --border rounded --padding '1 2' --border-foreground '#8aadf4'
   gum input --placeholder "$(t continue)" >/dev/null || true
 }
 

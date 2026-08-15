@@ -1,61 +1,86 @@
 # Omarchy Keybind Manager
 
-Gestor TUI de atajos personales para [Omarchy](https://omarchy.org/) y Hyprland. Usa el formato Lua nativo de Omarchy, por lo que los atajos creados también aparecen en `omarchy menu keybindings --print`.
+A TUI for creating and managing personal application shortcuts in
+[Omarchy](https://omarchy.org/) and Hyprland. It writes Omarchy's native Lua
+format, so shortcuts created here also appear in
+`omarchy menu keybindings --print`.
 
 ![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)
 
-## Qué hace
+## Features
 
-- Elegí una aplicación instalada o escribí un comando.
-- Ingresá el atajo con formato flexible: `win+shift+z`, `SUPER + SHIFT + Z` y `meta-z` se normalizan.
-- Detecta atajos existentes de Omarchy antes de guardar.
-- Ofrece una alternativa similar o permite sobrescribir el atajo en conflicto.
-- Al sobrescribir, genera el `hl.unbind()` necesario antes de crear el `o.bind()`.
-- Guarda únicamente tus atajos en `~/.config/omarchy/keybind-manager/bindings.json`.
+- Choose an installed application or enter a custom command.
+- Accept flexible shortcut input such as `win+shift+z`, `SUPER + SHIFT + Z`,
+  and `meta-z`; all are normalized.
+- Detect existing Omarchy shortcuts before saving.
+- Offer a similar available shortcut or let you overwrite a conflicting one.
+- Generate the required `hl.unbind()` before `o.bind()` when overwriting.
+- Store only your personal shortcuts in
+  `~/.config/omarchy/keybind-manager/bindings.json`.
 
-La UI se abre en la terminal predeterminada de Omarchy y utiliza `gum`, por lo que adopta el tema del sistema.
-Detecta `LC_ALL`, `LC_MESSAGES` o `LANG`: actualmente ofrece español para locales `es_*` e inglés para el resto; el inglés es el fallback seguro.
+The interface opens in Omarchy's default terminal and uses `gum`, so it follows
+the active system theme. It supports Spanish for `es_*` locales and English for
+all other locales.
 
-La ventana abre centrada y flotante a `760×560`, identificada por su app-id exclusivo. La regla no fuerza colores, bordes, opacidad ni animaciones: conserva los parámetros del tema Omarchy activo.
+The window opens centered at `760×560` with its own app ID. Its rule does not
+override theme colors, borders, opacity, or animations.
 
-## Requisitos
+## Requirements
 
-Omarchy 4, Hyprland, `gum`, `jq`, `uwsm-app` y Bash. En una instalación normal de Omarchy ya están presentes.
+Omarchy 4, Hyprland, Bash, `gum`, `jq`, `uwsm-app`, and `hyprctl`. These are
+normally present in a standard Omarchy installation.
 
-## Instalación
+## Installation
 
 ```bash
-git clone https://github.com/TU_USUARIO/omarchy-keybind-manager.git
-cd omarchy-keybind-manager
+git clone https://github.com/lucassidotti/Keybind-Manager.git
+cd Keybind-Manager
 ./install.sh
 ```
 
-El instalador coloca el ejecutable en `~/.local/bin`, crea la entrada **Keybind Manager** en el menú de aplicaciones y añade una única línea de carga a `~/.config/hypr/bindings.lua`. Nunca modifica `/usr/share/omarchy`.
+The installer places the executable in `~/.local/bin`, adds **Keybind Manager**
+to the applications menu, and adds one loader line to
+`~/.config/hypr/bindings.lua`. It never modifies `/usr/share/omarchy`.
 
-## Uso
+## Usage
 
-Abrí **Keybind Manager** desde el menú de aplicaciones de Omarchy, o ejecutá:
+Open **Keybind Manager** from the Omarchy applications menu, or run:
 
 ```bash
 omarchy-launch-tui --app-id=org.omarchy.keybind-manager omarchy-keybind-manager
 ```
 
-Las entradas se aplican inmediatamente y se pueden comprobar con:
+Changes apply immediately. To inspect all active shortcuts, run:
 
 ```bash
 omarchy menu keybindings --print
 ```
 
-## Archivos que administra
+## Managed files
 
-| Archivo | Propósito |
+| File | Purpose |
 | --- | --- |
-| `~/.config/omarchy/keybind-manager/bindings.json` | Base de datos de atajos personales. |
-| `~/.config/hypr/keybind-manager.lua` | Lua generado y cargado por Hyprland. |
-| `~/.config/hypr/keybind-manager-window.lua` | Regla de ventana compacta y centrada. |
-| `~/.config/hypr/bindings.lua` | Sólo añade `require("hypr.keybind-manager")`. |
+| `~/.config/omarchy/keybind-manager/bindings.json` | Personal shortcut database. |
+| `~/.config/hypr/keybind-manager.lua` | Generated Lua loaded by Hyprland. |
+| `~/.config/hypr/keybind-manager-window.lua` | Centered, compact window rule. |
+| `~/.config/hypr/bindings.lua` | Receives only `require("hypr.keybind-manager")`. |
 
-## Desarrollo y verificación
+## Updating
+
+Your shortcuts are kept in `~/.config`, so updating does not remove them. From
+your local clone, run:
+
+```bash
+git pull --ff-only
+./install.sh
+```
+
+After an update, close and reopen Keybind Manager. Publishing versioned GitHub
+releases with a changelog is the recommended distribution path for the
+community: users can choose stable versions and report regressions accurately,
+without the app silently downloading or changing their system configuration.
+
+## Development and verification
 
 ```bash
 ./tests/test.sh
@@ -63,42 +88,25 @@ bash -n bin/omarchy-keybind-manager install.sh uninstall.sh
 desktop-file-validate desktop/omarchy-keybind-manager.desktop
 ```
 
-Después de cambiar la integración con Hyprland, verificá además:
+After changing the Hyprland integration, also run:
 
 ```bash
 hyprctl reload
 hyprctl configerrors
 ```
 
-## Actualizaciones para la comunidad
-
-La instalación conserva los atajos del usuario en `~/.config`, por lo que se
-puede actualizar sin perderlos. Quien haya clonado el repositorio puede hacerlo
-desde su copia local:
-
-```bash
-git pull --ff-only
-./install.sh
-```
-
-Para distribuirlo más ampliamente, la vía recomendada es publicar *releases*
-versionadas en GitHub (un `.tar.gz` con este mismo instalador) y mantener un
-changelog. Eso permite que la comunidad instale versiones estables, reporte
-regresiones por versión y actualice repitiendo la instalación, sin que la app
-ejecute descargas o cambios automáticos en la configuración del sistema.
-
-## Desinstalación
+## Uninstalling
 
 ```bash
 ./uninstall.sh
 ```
 
-Conserva tus atajos guardados. Para eliminarlos también:
+Saved shortcuts are kept. To remove them as well:
 
 ```bash
 ./uninstall.sh --purge
 ```
 
-## Licencia
+## License
 
 [MIT](LICENSE).
