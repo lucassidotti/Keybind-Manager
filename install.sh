@@ -26,6 +26,6 @@ if ! grep -Fqx "$loader" "$hypr_bindings"; then
 fi
 
 command -v update-desktop-database >/dev/null && update-desktop-database "$applications_home" || true
-hyprctl reload
+"$bin_home/omarchy-keybind-manager" --regenerate
 hyprctl configerrors
 echo 'Installed: open Keybind Manager from the Omarchy applications menu.'

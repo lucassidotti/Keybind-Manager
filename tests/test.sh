@@ -13,4 +13,7 @@ assert_eq "$(normalize_key 'f12')" 'F12'
 assert_eq "$(normalize_key 'super+super+x')" 'SUPER + X'
 if normalize_key 'super+alt+' >/dev/null; then echo 'Invalid shortcut accepted' >&2; exit 1; fi
 
+assert_eq "$(env -u LC_ALL -u LC_MESSAGES LANG=en_US.UTF-8 bash -c 'source "$1"; t add' _ "$root/bin/omarchy-keybind-manager")" 'Assign application'
+assert_eq "$(env -u LC_ALL -u LC_MESSAGES LANG=es_AR.UTF-8 bash -c 'source "$1"; t add' _ "$root/bin/omarchy-keybind-manager")" 'Asignar aplicación'
+
 printf 'All tests passed.\n'

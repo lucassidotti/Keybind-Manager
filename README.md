@@ -14,6 +14,7 @@ Gestor TUI de atajos personales para [Omarchy](https://omarchy.org/) y Hyprland.
 - Guarda únicamente tus atajos en `~/.config/omarchy/keybind-manager/bindings.json`.
 
 La UI se abre en la terminal predeterminada de Omarchy y utiliza `gum`, por lo que adopta el tema del sistema.
+Detecta `LC_ALL`, `LC_MESSAGES` o `LANG`: actualmente ofrece español para locales `es_*` e inglés para el resto; el inglés es el fallback seguro.
 
 ## Requisitos
 
