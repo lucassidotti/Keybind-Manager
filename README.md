@@ -70,6 +70,23 @@ hyprctl reload
 hyprctl configerrors
 ```
 
+## Actualizaciones para la comunidad
+
+La instalación conserva los atajos del usuario en `~/.config`, por lo que se
+puede actualizar sin perderlos. Quien haya clonado el repositorio puede hacerlo
+desde su copia local:
+
+```bash
+git pull --ff-only
+./install.sh
+```
+
+Para distribuirlo más ampliamente, la vía recomendada es publicar *releases*
+versionadas en GitHub (un `.tar.gz` con este mismo instalador) y mantener un
+changelog. Eso permite que la comunidad instale versiones estables, reporte
+regresiones por versión y actualice repitiendo la instalación, sin que la app
+ejecute descargas o cambios automáticos en la configuración del sistema.
+
 ## Desinstalación
 
 ```bash

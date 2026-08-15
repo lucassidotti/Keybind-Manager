@@ -186,9 +186,13 @@ add_binding() {
 
 list_bindings() {
   local rows
-  rows="$(jq -r '.[] | [.key, .name, .command] | @tsv' "$STATE_FILE")"
+  # Keep the overview compact: commands are often long enough to make the
+  # terminal table unreadable, while the full command remains safely stored.
+  rows="$(jq -r '.[] | [.key, .name, (.command | if length > 42 then .[0:39] + "…" else . end)] | @tsv' "$STATE_FILE")"
   [[ -n $rows ]] || { gum style --faint "$(t no_bindings)"; return; }
-  printf '%s\n' "$rows" | gum table --border rounded --print --columns "$(t columns)"
+  # jq produces TSV, whereas gum defaults to CSV.  Passing the separator is
+  # what makes each binding render as the intended three-column grid.
+  printf '%s\n' "$rows" | gum table --separator $'\t' --border rounded --print --columns "$(t columns)" --padding '0 1'
   gum input --placeholder "$(t continue)" >/dev/null || true
 }
 
